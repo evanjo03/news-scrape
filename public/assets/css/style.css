@@ -1,0 +1,19 @@
+.article-img {
+    width: 80%;
+}
+
+.note-btn, .link-btn, .save-btn {
+    width: 40%;
+    padding: 10px;
+    margin: 10px;
+}
+
+
+
+hr { 
+    border: 0;
+    width: 100%;
+    color: black;
+    background-color: gray;
+    height: 2px;
+  }
