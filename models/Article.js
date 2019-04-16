@@ -24,6 +24,11 @@ var ArticleSchema = new Schema({
     type: String,
     required: true
   },
+  isFavorite: {
+    type: Boolean,
+    required: true,
+    default: false
+  },
   comment: {
     type: Schema.Types.ObjectId,
     ref: "Comment"

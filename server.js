@@ -4,6 +4,8 @@ var express = require("express");
 var cheerio = require("cheerio");
 var axios = require("axios");
 var logger = require("morgan");
+// Set Handlebars.
+var exphbs = require("express-handlebars");
 
 // Requiring the `User` model for accessing the `users` collection
 var db = require("./models");
@@ -23,6 +25,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // Make public a static folder
 app.use(express.static("public"));
+
+
+
+app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.set("view engine", "handlebars");
+
 
 // Connect to the Mongo DB
 mongoose.connect("mongodb://localhost/hwdb", { useNewUrlParser: true });
@@ -56,7 +64,6 @@ app.get("/scrape", function (req, res) {
                 category: category
             }
 
-
             // Create a new Article using the `result` object built from scraping
             db.Article.create(newArticle)
                 .then(function (result) {
@@ -68,11 +75,32 @@ app.get("/scrape", function (req, res) {
                     console.log(err);
                 });
         });
-
         // Send a message to the client
         res.send("Scrape Complete");
     });
 });
+app.get("/", function(req, res) {
+  db.Article.find({}).then(function(result) {
+      // If we were able to successfully find Articles, send them back to the client
+      res.render("index", result);
+    })
+    .catch(function(err) {
+      // If an error occurred, send it to the client
+      res.json(err);
+    });
+});
+
+app.get("/favorites", function(req, res) {
+  db.Article.find({}).then(function(result) {
+      
+    res.render("index", result);
+  })
+  .catch(function(err) {
+    // If an error occurred, send it to the client
+    res.json(err);
+  });
+});
+
 
 app.get("/articles", function(req, res) {
     db.Article.find({}).then(function(result) {
@@ -125,7 +153,7 @@ app.get("/articles/:id", function(req, res) {
     db.Article.update({"_id" : req.params.id}, { $unset: { comment: 1}})
       .then(function(result) {
         // If we were able to successfully delete a comment, send it back to the client
-        res.json(result);
+        res.json(req.params.id);
       })
       .catch(function(err) {
         // If an error occurred, send it to the client
@@ -137,3 +165,39 @@ app.get("/articles/:id", function(req, res) {
 app.listen(PORT, function () {
     console.log("App is listening on port", PORT)
 })
+
+// <!-- <!DOCTYPE html>
+// <html lang="en">
+
+// <head>
+//     <meta charset="UTF-8">
+//     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+//     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+//     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+//     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+//     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+//     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+//     <link rel="stylesheet" href="./assets/css/style.css">
+//     <title>Index</title>
+// </head>
+
+// <body>
+//     <div class="jumbotron">
+//         <div class="header text-center">
+//             <h3>MyNews</h3>
+//             <h6>Articles Scraped from NPR News</h6>
+//         </div>
+
+//     </div>
+//     <div class="container">
+//         <div class="row">
+//             <div class="col">
+//                 <div id="content">
+//                 </div>
+//             </div>
+//         </div>
+//     </div>
+
+//     <script type="text/javascript" , src="./assets/JavaScript/app.js"></script>
+// </body>
+// </html> --></meta>

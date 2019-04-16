@@ -17,3 +17,10 @@ hr {
     background-color: gray;
     height: 2px;
   }
+
+.categories {
+    background: blue;
+    color: white;
+    display: inline-block;
+    padding: 5px;
+}
