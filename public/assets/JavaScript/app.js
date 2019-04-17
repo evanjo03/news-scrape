@@ -15,8 +15,9 @@ $(document).ready(function () {
       html += `<h6 class="categories">${article.category}</h6></div></div>`;
       html += `<div class="row"><div class="col"><p>${article.summary}</p></div>`;
       html += `<div class="col"><img class='article-img img-fluid' src=${article.imageSrc}></div>`;
-      html += `<div class="col"><button data-id=${article._id} id=note-btn-${article._id} class="btn btn-primary note-btn">Favorite</button><a href=${article.link}>`
-      html += `<button id="read-btn-${article._id}" class="btn btn-warning link-btn">Read Article</button></a>`
+      html += `<div class="col">`
+      article.isFavorite ? html += `<button data-id=${article._id} id=favorite-btn-${article._id} class="btn btn-danger favorite favorite-btn">Unfavorite</button>` : html += `<button data-id=${article._id} id=favorite-btn-${article._id} class="btn btn-primary favorite-btn">Favorite</button>`     
+      html += `<a href=${article.link}><button id="read-btn-${article._id}" class="btn btn-warning link-btn">Read Article</button></a>`
       html += `<div id="note-${article._id}"></div></div></div>`
       html += `<hr size="10">`
       $("#content").append(html);
@@ -32,7 +33,7 @@ $(document).ready(function () {
       displayFavorites(result);
     });
   });
-  
+
   $(document).on("click", "#all", function () {
     $("#content").empty();
     $.ajax({
@@ -90,6 +91,23 @@ $(document).ready(function () {
       });
     }
   });
+
+  $(document).on("click", ".favorite-btn", function () {
+    // Empty the notes from the note section
+    // Save the id from the p tag
+    var thisId = $(this).attr("data-id");
+
+    // Now make an ajax call for the Article
+    $.ajax({
+      method: "PUT",
+      url: "/articles/favorites/" + thisId
+    }).then(function (data) {
+      console.log(data);
+      location.reload();
+    });
+  })
+
+
 
 
   // Whenever someone clicks a note button
