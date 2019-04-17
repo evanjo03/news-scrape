@@ -19,7 +19,7 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 var app = express();
 
 //define the port
-var PORT = 3500 || process.env.PORT;
+var PORT = process.env.PORT || 3500;
 
 // Configure middleware
 
@@ -31,12 +31,8 @@ app.use(express.json());
 // Make public a static folder
 app.use(express.static("public"));
 
-
-
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
-
-
 
 //scrape
 app.get("/scrape", function (req, res) {
@@ -179,10 +175,6 @@ app.put("/articles/favorites/:id", function (req, res) {
 
 
 })
-
-
-
-
 
 app.delete("/articles/:id", function (req, res) {
   // Create a new comment and pass the req.body to the entry
