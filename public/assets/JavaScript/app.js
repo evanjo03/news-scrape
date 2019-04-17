@@ -13,9 +13,9 @@ $(document).ready(function () {
       var html = "";
       html += `<div class="row content-row p-3"><div class="row"><div class="col"><h3>${article.title}</h3>`;
       html += `<h6 class="categories">${article.category}</h6></div></div>`;
-      html += `<div class="row"><div class="col"><p>${article.summary}</p></div>`;
-      html += `<div class="col"><img class='article-img img-fluid' src=${article.imageSrc}></div>`;
-      html += `<div class="col">`
+      html += `<div class="row"><div class="col-7"><p>${article.summary}</p></div>`;
+      html += `<div class="col-3"><img class='article-img img-fluid' src=${article.imageSrc}></div>`;
+      html += `<div class="col-2">`
       article.isFavorite ? html += `<button data-id=${article._id} id=favorite-btn-${article._id} class="btn btn-danger favorite favorite-btn">Unfavorite</button>` : html += `<button data-id=${article._id} id=favorite-btn-${article._id} class="btn btn-primary favorite-btn">Favorite</button>`     
       html += `<a href=${article.link}><button id="read-btn-${article._id}" class="btn btn-warning link-btn">Read Article</button></a>`
       html += `<div id="note-${article._id}"></div></div></div>`
@@ -44,6 +44,17 @@ $(document).ready(function () {
     });
   })
 
+  $(document).on("click", "#scrape", function () {
+    $("#content").empty();
+    $.ajax({
+      method: "GET",
+      url: "/scrape"
+    }).then(function (result) {
+      location.reload();
+    });
+  })
+
+
 
   function displayFavorites(articles) {
     articles.forEach(function (article) {
@@ -51,10 +62,11 @@ $(document).ready(function () {
         var html = "";
         html += `<div class="row content-row p-3"><div class="row"><div class="col"><h3>${article.title}</h3>`;
         html += `<h6 class="categories">${article.category}</h6></div></div>`;
-        html += `<div class="row"><div class="col"><p>${article.summary}</p></div>`;
-        html += `<div class="col"><img class='article-img img-fluid' src=${article.imageSrc}></div>`;
-        html += `<div class="col"><button data-id=${article._id} id=note-btn-${article._id} class="btn btn-primary note-btn">Add Note</button><a href=${article.link}>`
+        html += `<div class="row"><div class="col-7"><p>${article.summary}</p></div>`;
+        html += `<div class="col-3"><img class='article-img img-fluid' src=${article.imageSrc}></div>`;
+        html += `<div class="col-2"><button data-id=${article._id} id=note-btn-${article._id} class="btn btn-primary note-btn">Add Note</button><a href=${article.link}>`
         html += `<button id="read-btn-${article._id}" class="btn btn-warning link-btn">Read Article</button></a>`
+        html += `<button id="favorite-btn-${article._id}" class="btn btn-secondary favorite-btn">Unfavorite</button></a>`
         html += `<div id="note-${article._id}"></div></div></div>`
         html += `<hr size="10">`
         $("#content").append(html);
@@ -78,8 +90,9 @@ $(document).ready(function () {
       }).then(function (data) {
         console.log(data);
         $(`#note-btn-${data._id}`).attr("style", "display: none");
+        $(`#favorite-btn-${data._id}`).attr("style", "display: none");
         $(`#read-btn-${data._id}`).attr("style", "display: none");
-        $(`#note-${data._id}`).append("<textarea style='width: 80%; margin:4px;' class='form-control' rows='3' id='bodyinput' name='body'></textarea>");
+        $(`#note-${data._id}`).append("<textarea style='width: 100%;' class='form-control' rows='3' id='bodyinput' name='body'></textarea>");
         // A button to submit a new note, with the id of the article saved to it
         $(`#note-${data._id}`).append(`<button data-id="${data._id}" class="btn btn-success save-btn" id="save-btn-${data._id}">Save Note</button>`);
         $(`#note-${data._id}`).append(`<button data-id="${data._id}" class="btn btn-danger delete-btn" id="delete-btn-${data._id}">Delete Note</button>`);
@@ -125,6 +138,7 @@ $(document).ready(function () {
       console.log(data);
       $(`#note-${data}`).empty();
       $(`#note-btn-${data}`).attr("style", "display: inline-block");
+      $(`#favorite-btn-${data}`).attr("style", "display: inline-block");
       $(`#read-btn-${data}`).attr("style", "display: inline-block");
 
     });

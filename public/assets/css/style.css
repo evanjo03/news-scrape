@@ -1,9 +1,9 @@
 .article-img {
-    width: 80%;
+    width: 100%;
 }
 
-.note-btn, .link-btn, .save-btn, .favorite-btn {
-    width: 40%;
+.note-btn, .link-btn, .save-btn, .favorite-btn, .delete-btn {
+    width: 100%;
     padding: 10px;
     margin: 10px;
 }
@@ -25,4 +25,28 @@ hr {
     color: white;
     display: inline-block;
     padding: 5px;
+}
+
+.button:hover {
+    cursor: pointer;
+}
+
+.jumbotron {
+    background-image: url("../images/background.jpg");
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    margin: auto;
+    display: block;
+    text-align: center;
+}
+
+.header {
+    color: white;
+    background: black;
+    display: inline-block;
+    padding: 10px;
+
 }

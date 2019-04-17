@@ -11,9 +11,9 @@ var exphbs = require("express-handlebars");
 var db = require("./models");
 
 // If deployed, use the deployed database. Otherwise use the local mongoHeadlines database
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mydb";
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/sraperdb";
 
-mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useCreateIndex: true });
 
 //define application
 var app = express();
@@ -43,8 +43,6 @@ app.get("/scrape", function (req, res) {
 
     // Now, we grab every h2 within an article tag, and do the following:
     $("article.item.has-image").each(function (i, element) {
-      // Save an empty result object
-      //var result = {};
 
       // Add the text and href of every link, and save them as properties of the result object
       var title = $(element).find("div.item-info").find("h2.title").find("a").text();
@@ -60,7 +58,6 @@ app.get("/scrape", function (req, res) {
         imageSrc: imageSrc,
         category: category
       }
-
       // Create a new Article using the `result` object built from scraping
       db.Article.create(newArticle)
         .then(function (result) {
