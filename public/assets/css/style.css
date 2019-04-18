@@ -10,6 +10,7 @@
 
 body {
     font-family: Georgia, 'Times New Roman', Times, serif;
+    background: rgb(201, 201, 201);
 }
 
 hr { 
@@ -32,7 +33,7 @@ hr {
 }
 
 .jumbotron {
-    background-image: url("../images/background.jpg");
+    background-image: url("../images/background.png");
     background-attachment: fixed;
     background-position: center;
     background-repeat: no-repeat;
@@ -41,12 +42,22 @@ hr {
     margin: auto;
     display: block;
     text-align: center;
+    height: 300px;
 }
 
 .header {
     color: white;
-    background: black;
     display: inline-block;
     padding: 10px;
+}
 
+.main {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 10px;
+}
+
+h1 {
+    font-size: 120px;
 }
